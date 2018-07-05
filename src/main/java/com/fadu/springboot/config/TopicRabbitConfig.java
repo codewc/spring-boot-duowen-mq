@@ -1,22 +1,59 @@
 package com.fadu.springboot.config;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 @Configuration
+@EnableConfigurationProperties(RabbitMQConstant.class)
 public class TopicRabbitConfig {
+
+    @Autowired
+    private RabbitMQConstant rabbitMQConstant;
 
     final static String message = "topic.message";
     final static String messages = "topic.messages";
+
+    @Getter
+    @Setter
+    @Value("${duowen.rabbitmq.evn.connectionFactory.host}")
+    private String host;
+
+    @Getter
+    @Setter
+    @Value("${duowen.rabbitmq.evn.connectionFactory.port}")
+    private int port;
+
+    @Getter
+    @Setter
+    @Value("${duowen.rabbitmq.evn.connectionFactory.username}")
+    private String username;
+
+    @Getter
+    @Setter
+    @Value("${duowen.rabbitmq.evn.connectionFactory.password}")
+    private String password;
+
+    @Getter
+    @Setter
+    @Value("${duowen.rabbitmq.evn.connectionFactory.virtualHost}")
+    private String virtualHost;
 
     @Bean
     public Queue queueMessage() {
@@ -51,11 +88,11 @@ public class TopicRabbitConfig {
     @Bean
     public ConnectionFactory connectionFactory() {
         CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
-        connectionFactory.setHost("192.168.42.129");
-        connectionFactory.setPort(5672);
-        connectionFactory.setUsername("admin");
-        connectionFactory.setPassword("admin");
-        connectionFactory.setVirtualHost("/");
+        connectionFactory.setHost(this.host);
+        connectionFactory.setPort(this.port);
+        connectionFactory.setUsername(this.username);
+        connectionFactory.setPassword(this.password);
+        connectionFactory.setVirtualHost(this.virtualHost);
         connectionFactory.setPublisherConfirms(true);
         return connectionFactory;
     }
@@ -73,31 +110,106 @@ public class TopicRabbitConfig {
         return template;
     }
 
-    /**
-     * 指定交换机
-     *
-     * @return
-     */
+    //-----------指定交换机[开始]----------------------
     @Bean
-    public DirectExchange defaultExchange() {
-        DirectExchange exchange = new DirectExchange("koms");
+    public DirectExchange smsExchange() {
+        DirectExchange exchange = new DirectExchange(rabbitMQConstant.getSmsExchangeName());
         return exchange;
     }
 
-    /**
-     * Queue:构建队列，名称，是否持久化之类，默认sms短信服务
-     *
-     * @return
-     */
     @Bean
-    public Queue queue() {
-        return new Queue("sms", true);
+    public DirectExchange smsDelayedExchange() {
+        DirectExchange exchange = new DirectExchange(rabbitMQConstant.getSmsDelayedExchangeName());
+        return exchange;
     }
 
     @Bean
-    public Binding binding() {
-        return BindingBuilder.bind(queue()).to(defaultExchange()).with("sms");
+    public DirectExchange monitorScheduleExchange() {
+        DirectExchange exchange = new DirectExchange("monitorScheduleDirectExchange");
+        return exchange;
     }
+
+    @Bean
+    public DirectExchange monitorDelayedScheduleExchange() {
+        DirectExchange exchange = new DirectExchange("monitorDelayedScheduleExchange");
+        return exchange;
+    }
+    //-----------指定交换机[结束]----------------------
+
+    //-----------指定Queue[开始]Queue:构建队列，名称，是否持久化之类，默认sms短信服务----------------------
+    @Bean
+    public Queue smsImmediateQueue() {
+        return new Queue(rabbitMQConstant.getSmsImmediateQueue(), true);
+    }
+
+    @Bean
+    public Queue deadSMSLetterQueue() {
+        Map<String, Object> arguments = new HashMap<>();
+        //参考：{@link https://blog.csdn.net/qq_41143507/article/details/80132915}
+        arguments.put("x-dead-letter-exchange", rabbitMQConstant.getSmsDelayedExchangeName());// 死信：DLX,dead
+        arguments.put("x-dead-letter-routing-key", rabbitMQConstant.getSmsDelayedAfterRepeatQueue());
+        Queue queue = new Queue(rabbitMQConstant.getSmsDelayedQueue(), true, false, false, arguments);
+        return queue;
+    }
+
+    @Bean
+    public Queue repeatSMSLetterQueue() {
+        Queue queue = new Queue(rabbitMQConstant.getSmsDelayedAfterRepeatQueue(), true, false, false);
+        return queue;
+    }
+
+    @Bean
+    public Queue monitorScheduleQueue() {
+        return new Queue("monitorScheduleQueue", true);
+    }
+    @Bean
+    public Queue deadMonitorScheduleQueue() {
+        Map<String, Object> arguments = new HashMap<>();
+        arguments.put("x-dead-letter-exchange", "monitorDelayedScheduleExchange");// 死信：DLX,dead
+        arguments.put("x-dead-letter-routing-key", "repeatMonitorScheduleQueue");
+        Queue queue = new Queue("deadMonitorScheduleQueue", true, false, false, arguments);
+        return queue;
+    }
+
+    @Bean
+    public Queue repeatMonitorScheduleQueue() {
+        Queue queue = new Queue("repeatMonitorScheduleQueue", true, false, false);
+        return queue;
+    }
+    //-----------指定Queue[结束]----------------------
+
+    //-----------指定Binding[开始]----------------------
+    @Bean
+    public Binding smsImmediateBinding() {
+        return BindingBuilder.bind(smsImmediateQueue()).to(smsExchange()).with(rabbitMQConstant.getSmsRootingKey());
+    }
+
+
+    @Bean
+    public Binding deadSMSLetterBind() {
+        return BindingBuilder.bind(deadSMSLetterQueue()).to(smsDelayedExchange()).with(rabbitMQConstant.getSmsDelayedQueue());
+    }
+
+    @Bean
+    public Binding repeatSMSLetterBind() {
+        return BindingBuilder.bind(repeatSMSLetterQueue()).to(smsDelayedExchange()).with(rabbitMQConstant.getSmsDelayedAfterRepeatQueue());
+    }
+
+    @Bean
+    public Binding deadMonitorScheduleBind() {
+        return BindingBuilder.bind(deadMonitorScheduleQueue()).to(monitorDelayedScheduleExchange()).with("deadMonitorScheduleQueue");
+    }
+
+    @Bean
+    public Binding repeatMonitorScheduleBind() {
+        return BindingBuilder.bind(repeatMonitorScheduleQueue()).to(monitorDelayedScheduleExchange()).with("repeatMonitorScheduleQueue");
+    }
+
+    @Bean
+    public Binding monitorScheduleBind() {
+        return BindingBuilder.bind(monitorScheduleQueue()).to(monitorScheduleExchange()).with("monitorScheduleQueue");
+    }
+    //-----------指定Binding[结束]----------------------
 
     @Bean
     public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(ConnectionFactory connectionFactory) {

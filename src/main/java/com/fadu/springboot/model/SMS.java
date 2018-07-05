@@ -31,4 +31,8 @@ public class SMS implements Serializable {
      */
     private String templateParam;
 
+    /**
+     * 延迟发送时长:分钟为单位
+     */
+    private long waitMinutes;
 }

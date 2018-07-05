@@ -127,7 +127,7 @@ public class SMSServiceImpl implements SMSService {
             String smsret = connectURL("http://54.223.235.82/msg/HttpBatchSendSM", body, 5000);
             if (null == smsret) {
                 res.setMsg("无返回数据！");
-                log.error("发送短信验证码错误(" + mobile + ")，第三方无返回数据");
+                log.error("发送短信验证码错误,由于第三方无返回数据。此次发送的手机号为：->{}", mobile);
             } else {
                 if (smsret.contains(",0")) {
                     res.setMsg("提交成功,请注意查收短信！");
@@ -137,10 +137,10 @@ public class SMSServiceImpl implements SMSService {
                     log.error("发送提交太频繁(" + mobile + ")，第三方返回：" + smsret);
                 } else if (smsret.contains(",107")) {
                     res.setMsg("手机号码错误！");
-                    log.error("发送短信验证码手机号码错误(" + mobile + ")，第三方返回：" + smsret);
+                    log.error("发送短信验证码手机号码错误,手机号为：->{}，阿里错误信息返回：->{}", mobile, smsret);
                 } else {
                     res.setMsg("发送失败，请稍后重试！");
-                    log.error("发送短信验证码错误(" + mobile + ")，第三方返回：" + smsret);
+                    log.error("发送短信错误,发送手机号为：->{}，阿里错误信息返回：->{}", mobile, smsret);
                 }
             }
         } catch (Exception e) {
@@ -157,7 +157,7 @@ public class SMSServiceImpl implements SMSService {
      * @param mobile        手机号
      * @param templateCode  模板号
      * @param templateParam 模板使用业务参数变量
-     * @param signName
+     * @param signName      商户签名
      * @return 结果信息
      */
     private JsonData sendDayuSms(String mobile, String templateCode, String templateParam, String signName) {
@@ -207,6 +207,7 @@ public class SMSServiceImpl implements SMSService {
                 response.setRet(true);
                 response.setMsg("发送成功！");
             } else {
+                log.error("大鱼短信发送失败，阿里返回错误原因为：->{}", sendSmsResponse.getMessage());
                 response.setMsg("发送失败，请稍后重试！");
             }
         } catch (ClientException e) {

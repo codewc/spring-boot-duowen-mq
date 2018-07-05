@@ -1,24 +1,74 @@
 server:
+  #应用端口
   port: 8888
 spring:
   application:
-    #Ӧ������
+    #指定应用名
     name: duowen-sms-rabbitmq
 
-  #rabbitmq������
-  rabbitmq:
-    host: 192.168.42.129
-    port: 5672
-    username: admin
-    password: admin
-    virtual-host: /
+#springcloud feign 请求超时处理
+#请求处理的超时时间
+ribbon:
+  ReadTimeout: 4000
+#请求连接的超时时间
+  ConnectTimeout: 3000
+#####################duowen个性化配置-开始####################################
+duowen:
+  feign:
+    client:
+      #调用地址
+      url:
+        #正在使用的环境
+        evn: http://localhost:8080/duowenapp_b
 
-logging:
-  level: info
-# error��־���
-#log4j.appender.errorfile=org.apache.log4j.DailyRollingFileAppender
-#log4j.appender.errorfile.file=logs/error.log
-#log4j.appender.errorfile.DatePattern='.'yyyy-MM-dd
-#log4j.appender.errorfile.Threshold = ERROR
-#log4j.appender.errorfile.layout=org.apache.log4j.PatternLayout
-#log4j.appender.errorfile.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss,SSS} %5p %c{1}:%L - %m%n
+  rabbitmq:
+    #开发环境配置。
+    dev:
+      connectionFactory:
+        host: 120.76.138.153
+        port: 5672
+        username: admin
+        password: admin
+        virtualHost: /
+    #线上环境
+    product:
+        connectionFactory:
+          host: 120.25.161.131
+          port: 5672
+          username: admin
+          password: admin
+          virtualHost: /
+
+    #本地虚拟机
+    localhost:
+        connectionFactory:
+          host: localhost
+          port: 5672
+          username: admin
+          password: admin
+          virtualHost: /
+    #正在使用的环境
+    evn:
+        connectionFactory:
+          host: 120.76.138.153
+          port: 5672
+          username: admin
+          password: admin
+          virtualHost: /
+    #交换机
+    exchanges:
+      smsExchangeName: sms
+      smDelayedExchangeName: sms_delayed
+      monitorScheduleExchangeName: monitorScheduleExchangeName
+    queues:
+      #立即发送短信消息
+      immediate: immediate
+      #延迟发送短信消息
+      delayed: delayed
+      #延迟发送短信消息,重新处理
+      smsDelayedAfterRepeat: smsDelayedAfterRepeat
+    #立即发送消息
+    routingKey:
+      smsRootingKey: sms
+      smDelayedKey: sms_delayed
+#####################duowen个性化配置-结束####################################

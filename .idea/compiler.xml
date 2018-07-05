@@ -11,6 +11,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="spring-boot-rabbitmq" target="1.8" />
+      <module name="spring-boot-rabbitmq (1)" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
