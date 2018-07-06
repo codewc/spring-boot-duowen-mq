@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Implementation-Vendor: Pivotal Software, Inc.
+Implementation-Title: spring-boot-rabbitmq
+Implementation-Version: 1.0.0
+Implementation-Vendor-Id: com.neo
+Build-Jdk: 1.7.0_79
+Built-By: Administrator
+Created-By: Apache Maven 3.3.9
+Implementation-URL: http://projects.spring.io/spring-boot/spring-boot-
+ rabbitmq/
+

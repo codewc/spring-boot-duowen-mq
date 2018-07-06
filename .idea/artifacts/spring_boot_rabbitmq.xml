@@ -3,14 +3,6 @@
     <output-path>$PROJECT_DIR$/out/artifacts/spring_boot_rabbitmq</output-path>
     <root id="archive" name="spring-boot-rabbitmq.war">
       <element id="artifact" artifact-name="spring-boot-rabbitmq:war exploded" />
-      <element id="directory" name="WEB-INF">
-        <element id="directory" name="lib">
-          <element id="library" level="module" name="Maven: aliyun.api:aliyun-java-sdk-core:3.3.1" module-name="spring-boot-rabbitmq" />
-          <element id="library" level="module" name="Maven: aliyun.api:aliyun-java-sdk-dysmsapi:1.0.0" module-name="spring-boot-rabbitmq" />
-          <element id="library" level="module" name="Maven: aliyun.api:aliyun-java-sdk-sts:2.1.6" module-name="spring-boot-rabbitmq" />
-          <element id="library" level="module" name="Maven: aliyun.api:aliyun-sdk-oss:2.0.6" module-name="spring-boot-rabbitmq" />
-        </element>
-      </element>
     </root>
   </artifact>
 </component>

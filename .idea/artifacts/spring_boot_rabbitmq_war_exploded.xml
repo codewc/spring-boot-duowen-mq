@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="exploded-war" name="spring-boot-rabbitmq:war exploded">
-    <output-path>$PROJECT_DIR$/target/spring-boot-rabbitmq</output-path>
+    <output-path>$PROJECT_DIR$/out/artifacts/spring_boot_rabbitmq_war_exploded</output-path>
     <root id="root">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
@@ -93,13 +93,15 @@
           <element id="library" level="project" name="Maven: com.rabbitmq:http-client:1.1.1.RELEASE" />
           <element id="library" level="project" name="Maven: com.rabbitmq:amqp-client:4.0.3" />
           <element id="library" level="project" name="Maven: org.springframework.amqp:spring-amqp:1.7.7.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot-devtools:1.5.12.RELEASE" />
           <element id="library" level="project" name="Maven: org.apache.commons:commons-lang3:3.0" />
           <element id="library" level="project" name="Maven: org.projectlombok:lombok:1.16.8" />
+          <element id="library" level="module" name="Maven: aliyun.api:aliyun-java-sdk-core:3.3.1" module-name="spring-boot-rabbitmq" />
+          <element id="library" level="module" name="Maven: aliyun.api:aliyun-java-sdk-sts:2.1.6" module-name="spring-boot-rabbitmq" />
+          <element id="library" level="module" name="Maven: aliyun.api:aliyun-sdk-oss:2.0.6" module-name="spring-boot-rabbitmq" />
+          <element id="library" level="module" name="Maven: aliyun.api:aliyun-java-sdk-dysmsapi:1.0.0" module-name="spring-boot-rabbitmq" />
           <element id="library" level="project" name="Maven: com.google.code.gson:gson:2.8.5" />
         </element>
-      </element>
-      <element id="directory" name="META-INF">
-        <element id="file-copy" path="$PROJECT_DIR$/target/spring-boot-rabbitmq/META-INF/MANIFEST.MF" />
       </element>
       <element id="javaee-facet-resources" facet="spring-boot-rabbitmq/web/Web" />
     </root>

@@ -1,0 +1,74 @@
+server:
+  #应用端口
+  port: 8888
+spring:
+  application:
+    #指定应用名
+    name: duowen-sms-rabbitmq
+
+#springcloud feign 请求超时处理
+#请求处理的超时时间
+ribbon:
+  ReadTimeout: 4000
+#请求连接的超时时间
+  ConnectTimeout: 3000
+#####################duowen个性化配置-开始####################################
+duowen:
+  feign:
+    client:
+      #调用地址
+      url:
+        #正在使用的环境
+        evn: http://localhost:8080/duowenapp_b
+
+  rabbitmq:
+    #开发环境配置。
+    dev:
+      connectionFactory:
+        host: 120.76.138.153
+        port: 5672
+        username: admin
+        password: admin
+        virtualHost: /
+    #线上环境
+    product:
+        connectionFactory:
+          host: 120.25.161.131
+          port: 5672
+          username: admin
+          password: admin
+          virtualHost: /
+
+    #本地虚拟机
+    localhost:
+        connectionFactory:
+          host: localhost
+          port: 5672
+          username: admin
+          password: admin
+          virtualHost: /
+    #正在使用的环境
+    evn:
+        connectionFactory:
+          host: 120.76.138.153
+          port: 5672
+          username: admin
+          password: admin
+          virtualHost: /
+    #交换机
+    exchanges:
+      smsExchangeName: sms
+      smDelayedExchangeName: sms_delayed
+      monitorScheduleExchangeName: monitorScheduleExchangeName
+    queues:
+      #立即发送短信消息
+      immediate: immediate
+      #延迟发送短信消息
+      delayed: delayed
+      #延迟发送短信消息,重新处理
+      smsDelayedAfterRepeat: smsDelayedAfterRepeat
+    #立即发送消息
+    routingKey:
+      smsRootingKey: sms
+      smDelayedKey: sms_delayed
+#####################duowen个性化配置-结束####################################
