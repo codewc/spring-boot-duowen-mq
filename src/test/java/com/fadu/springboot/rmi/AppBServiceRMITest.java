@@ -18,7 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class AppBServiceRMITest {
 
 	@Autowired
-	private AppBServiceRMI serviceRMI;
+	private AppBServiceRMIHelper serviceRMIHelper;
 
 	@Test
 	public void doMT002Service() throws Exception {
@@ -30,8 +30,7 @@ public class AppBServiceRMITest {
         request.setOrderId("180705011153");
         request.setToken("8af40d1761dc13fa0161dc17d1300004");
         request.setVersion(560);
-        AppBServiceRMIHelper helper = new AppBServiceRMIHelper(serviceRMI);
-        MT002Response response = helper.doService(request);
+        MT002Response response = serviceRMIHelper.doService(request);
 	}
 
     @Test
@@ -44,8 +43,7 @@ public class AppBServiceRMITest {
         request.setOrderId("180705011153");
         request.setToken("8af40d1761dc13fa0161dc17d1300004");
         request.setVersion(560);
-        AppBServiceRMIHelper helper = new AppBServiceRMIHelper(serviceRMI);
-        MT002Response response = helper.doService(request);
+        MT002Response response = serviceRMIHelper.doService(request);
     }
 
 }

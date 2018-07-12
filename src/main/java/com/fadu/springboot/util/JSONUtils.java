@@ -25,7 +25,7 @@ public class JSONUtils {
      * @param <T>
      * @return
      */
-    public static <T> T getJosnObject(String jsonString, Type type) {
+    public static <T> T getJsonObject(String jsonString, Type type) {
         Gson gson = new Gson();
         T obj = gson.fromJson(jsonString, type);
         return obj;

@@ -1,0 +1,11 @@
+#logback只支持jdk1.8
+https://www.linuxidc.com/Linux/2016-06/132678.htm
+cd /usr/local/
+
+cd /usr/local/java_8/jdk1.8.0_171
+
+set JAVA_HOME=/home/jdk/Java\jdk7\jdk1.7.0_51
+set JRE_HOME=/home/jdk/Java\jdk7\jre7
+
+set JAVA_HOME=/usr/local/java_8/jdk1.8.0_171
+set JRE_HOME=/usr/local/java_8/jdk1.8.0_171/jre

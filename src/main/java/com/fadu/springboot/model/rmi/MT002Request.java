@@ -1,6 +1,7 @@
 package com.fadu.springboot.model.rmi;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
@@ -9,6 +10,7 @@ import lombok.ToString;
  */
 @Data
 @ToString
+@EqualsAndHashCode
 public class MT002Request extends BaseRequest {
 
     /**

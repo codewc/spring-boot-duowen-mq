@@ -30,6 +30,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
+        <!--  部署生产时，需要解除注释：不用自带的tomcat -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -101,11 +107,6 @@
             <systemPath>${project.basedir}/src/main/lib/dysmslib/aliyun-java-sdk-dysmsapi-1.0.0.jar</systemPath>
         </dependency>
         <!-- 阿里云短信依赖-结束 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
-            <scope>provided</scope>
-        </dependency>
         <!-- gson的工具包-->
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -147,6 +148,26 @@
                         </goals>
                         <configuration>
                             <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin><!--配置Maven插件将本地Jar打包进War中,在进行以上配置以后，编写代码时已经可以引入Jar包中的class了，但是在打包时，由于scope=system,默认并不会将Jar包打进war包中，所有需要通过插件进行打包。-->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.10</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/lib
+                            </outputDirectory>
+                            <includeScope>system</includeScope>
                         </configuration>
                     </execution>
                 </executions>

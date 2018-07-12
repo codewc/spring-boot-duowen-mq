@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 public class RepeatMonitorScheduleReceiver {
 
     @Autowired
-    private AppBServiceRMI serviceRMI;
+    private AppBServiceRMIHelper serviceRMIHelper;
 
     @RabbitListener(queues = "repeatMonitorScheduleQueue", containerFactory = "rabbitListenerContainerFactory")
     public void process(@Payload MonitorSsdbOrder monitorSsdbOrder, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) throws Exception {
@@ -39,12 +39,11 @@ public class RepeatMonitorScheduleReceiver {
             request.setMonitorSchedule(monitorSsdbOrder.getMonitorSchedule());
             request.setMonitorRemark(monitorSsdbOrder.getMonitorRemark());
             request.setOrderId(monitorSsdbOrder.getOrderId());
-            request.setToken("8af40d1763952f960163a54b4f8717e1");
+            request.setToken("8af40d1763952f960163a54b4f8717e1");//设置请求token.
             request.setActionCode("MT002");
             request.setVersion(100);
             request.setTime(System.currentTimeMillis());
-                AppBServiceRMIHelper helper = new AppBServiceRMIHelper(serviceRMI);
-            MT002Response response = helper.doService(request);
+            MT002Response response = serviceRMIHelper.doService(request);
         } catch (Exception e) {
             log.error("发生了错误->", e);
         } finally {

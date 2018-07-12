@@ -6,6 +6,8 @@ import com.fadu.springboot.util.JSONUtils;
 import com.google.gson.reflect.TypeToken;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Type;
 
@@ -16,13 +18,11 @@ import java.lang.reflect.Type;
  * @Date: 2018/7/4 15:55
  */
 @Slf4j
+@Component
 public class AppBServiceRMIHelper {
 
+    @Autowired
     private AppBServiceRMI serviceRMI;
-
-    public AppBServiceRMIHelper(AppBServiceRMI serviceRMI) {
-        this.serviceRMI = serviceRMI;
-    }
 
     public MT002Response doService(MT002Request request) {
         String retStr = serviceRMI.doService(request);
@@ -32,8 +32,8 @@ public class AppBServiceRMIHelper {
         }
         Type type = new TypeToken<MT002Response>() {
         }.getType();
-        log.info("发送报文为：->{};返回报文为：->{}",request,retStr);
-        MT002Response result = JSONUtils.getJosnObject(retStr, type);
+        log.info("发送报文为：->{};返回报文为：->{}", request, retStr);
+        MT002Response result = JSONUtils.getJsonObject(retStr, type);
         return result;
     }
 

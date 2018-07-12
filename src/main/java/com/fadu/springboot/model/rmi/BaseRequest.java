@@ -1,6 +1,7 @@
 package com.fadu.springboot.model.rmi;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.io.Serializable;
@@ -11,6 +12,7 @@ import java.io.Serializable;
  */
 @Data
 @ToString
+@EqualsAndHashCode
 public class BaseRequest implements Serializable {
     /**接口编码*/
     private String actionCode = "";

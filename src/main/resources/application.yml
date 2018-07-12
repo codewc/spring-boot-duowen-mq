@@ -18,8 +18,11 @@ duowen:
     client:
       #调用地址
       url:
+        # 本地地址
+        localhost: http://localhost:8080/duowenapp_b
         #正在使用的环境
-        evn: http://localhost:8080/duowenapp_b
+        evn: https://test.duowenlvshi.com/duowenapp_b
+
 
   rabbitmq:
     #开发环境配置。
@@ -57,15 +60,15 @@ duowen:
           virtualHost: /
     #交换机
     exchanges:
-      smsExchangeName: sms
-      smDelayedExchangeName: sms_delayed
-      monitorScheduleExchangeName: monitorScheduleExchangeName
+      smsExchangeName: sms #短信
+      smDelayedExchangeName: sms_delayed #定时短信发送
+      monitorScheduleExchangeName: monitorScheduleExchangeName #调度监控
     queues:
-      #立即发送短信消息
+      #smsExchangeName 立即发送短信消息
       immediate: immediate
-      #延迟发送短信消息
+      #smDelayedExchangeName 延迟发送短信消息
       delayed: delayed
-      #延迟发送短信消息,重新处理
+      #smDelayedExchangeName 延迟发送短信消息,重新处理
       smsDelayedAfterRepeat: smsDelayedAfterRepeat
     #立即发送消息
     routingKey:

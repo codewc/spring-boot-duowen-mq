@@ -21,12 +21,6 @@ public class MonitorSsdbOrder implements Serializable {
     private String orderId;
 
     /**
-     * {@link #monitorSchedule}
-     * 付款后，在出函时长后未出函，发送短信给多问客服以及保险公司。注意非工作日以及非工作时不提醒。工作时为早上9点-下午16点。
-     */
-    public static final String MONITOR_SCHEDULE_1 ="1";
-
-    /**
      * 进度监控点
      */
     private String monitorSchedule;
