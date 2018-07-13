@@ -35,9 +35,6 @@ public class SMSReceiver {
     @Autowired
     SMSQueueService smsQueueService;
 
-    @Autowired
-    RabbitMQConstant rabbitMQConstant;
-
     @RabbitHandler
     public void process(@Payload SMS dto, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) throws Exception {
         if (dto == null) {

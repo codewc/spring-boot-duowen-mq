@@ -2,6 +2,8 @@
 <configuration>
     <!-- 属性文件 -->
     <property name="logDir" value="${catalina.base}/logs/spring-boot-rabbitmq"/>
+    <property name="log.maxHistory" value="365"/>
+    <property name="log.pattern" value="%-12(%d{yyyy-MM-dd HH:mm:ss.SSS}) |-%-5level [%thread] %c [%L] -| %msg%n"/>
 
     <!-- 默认的控制台日志输出，一般生产环境都是后台启动，这个没太大作用 -->
     <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
@@ -16,20 +18,41 @@
         <!--<Encoding>UTF-8</Encoding>-->
         <File>${logDir}/spring-boot-rabbitmq.log</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>${logDir}/history/service.%d{yyyy-MM-dd}.log.gz</FileNamePattern>
+            <FileNamePattern>${logDir}/history/spring-boot-rabbitmq.%d{yyyy-MM-dd}.log.gz</FileNamePattern>
             <maxHistory>30</maxHistory>
         </rollingPolicy>
         <layout class="ch.qos.logback.classic.PatternLayout">
             <pattern>%date [%thread] %-5level %logger{50}:%L - %msg%n</pattern>
         </layout>
     </appender>
+
+    <!-- 错误日志分类：便于问题排查和分析 -->
+    <appender name="errorAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 文件路径 -->
+        <file>${logDir}/error/spring-boot-rabbitmq-error.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 文件名称 -->
+            <fileNamePattern>${logDir}/error/spring-boot-rabbitmq-error.%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+            <!-- 文件最大保存历史数量 -->
+            <MaxHistory>${log.maxHistory}</MaxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${log.pattern}</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
     <!-- 修改其他包的日志输出级别 -->
     <logger name="org.apache.zookeeper">
         <level value="WARN"/>
     </logger>
-    <!-- root 默认日志配置 ， 注意这里的级别哈！小心生产环境用DEBUG，压爆你的磁盘！-->
+    <!-- root 默认日志配置-->
     <root level="INFO">
         <appender-ref ref="logfile"/>
         <appender-ref ref="stdout"/>
+        <appender-ref ref="errorAppender"/>
     </root>
 </configuration>

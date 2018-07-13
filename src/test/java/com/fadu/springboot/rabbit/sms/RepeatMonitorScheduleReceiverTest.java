@@ -36,7 +36,49 @@ public class RepeatMonitorScheduleReceiverTest {
 
     @Test
     public void process() {
+        MT002Request request = buildMT002Request_Monitor_Schedule_3();
+        MT002Response response = serviceRMIHelper.doService(request);
+        System.out.println(response);
+    }
+
+    private MT002Request buildMT002Request_Monitor_Schedule_0() {
+        MT002Request request = buildCommonParamter();
+        request.setMonitorSchedule("0");
+        request.setMonitorRemark("测试类：测试订单");
+        return request;
+    }
+
+    private MT002Request buildMT002Request_Monitor_Schedule_1() {
+        // update ssdb_order set orderState=30 where orderId='160607010015';
+        MT002Request request = buildCommonParamter();
+        request.setMonitorSchedule("1");
+        request.setMonitorRemark("测试类：测试订单");
+        return request;
+    }
+
+    private MT002Request buildMT002Request_Monitor_Schedule_2() {
+        // update ssdb_order set orderState=21 where orderId='160607010015';
+        MT002Request request = buildCommonParamter();
+        request.setMonitorSchedule("2");
+        request.setMonitorRemark("测试类：测试订单");
+        return request;
+    }
+
+    private MT002Request buildMT002Request_Monitor_Schedule_3() {
+        // update ssdb_order set orderState=30 where orderId='160607010015';
+        MT002Request request = buildCommonParamter();
+        request.setMonitorSchedule("3");
+        request.setMonitorRemark("测试类：测试订单");
+        return request;
+    }
+
+    private MT002Request buildCommonParamter() {
         MT002Request request = new MT002Request();
-        serviceRMIHelper.doService(request);
+        request.setToken("8af40d1763952f960163a54b4f8717e1");//设置请求token.
+        request.setActionCode("MT002");
+        request.setOrderId("160607010015");
+        request.setVersion(100);
+        request.setTime(System.currentTimeMillis());
+        return request;
     }
 }
