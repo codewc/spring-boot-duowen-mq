@@ -25,6 +25,7 @@ public class AppBServiceRMIHelper {
     private AppBServiceRMI serviceRMI;
 
     public MT002Response doService(MT002Request request) {
+        log.info("发送报文为：->{};",request);
         String retStr = serviceRMI.doService(request);
         if (StringUtils.isEmpty(retStr)) {
             log.warn("返回报文为空，发送报文为->{}", request);
@@ -32,7 +33,7 @@ public class AppBServiceRMIHelper {
         }
         Type type = new TypeToken<MT002Response>() {
         }.getType();
-        log.info("发送报文为：->{};返回报文为：->{}", request, retStr);
+        log.info("返回报文为：->{}", retStr);
         MT002Response result = JSONUtils.getJsonObject(retStr, type);
         return result;
     }

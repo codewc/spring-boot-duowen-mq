@@ -37,8 +37,9 @@ duowen:
         # 本地地址
         localhost: http://localhost:8080/duowenapp_b
         dev: https://test.duowenlvshi.com/duowenapp_b
+        product: http://120.25.244.48
         #正在使用的环境
-        evn: http://localhost:8080/duowenapp_b
+        evn: https://test.duowenlvshi.com/duowenapp_b
 
 
   rabbitmq:

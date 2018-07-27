@@ -27,4 +27,9 @@ public class MT002Request extends BaseRequest {
      * 进度监控备注详情
      */
     private String monitorRemark;
+
+    /**
+     * 延迟监控时长:分钟为单位
+     */
+    private long waitMinutes;
 }
