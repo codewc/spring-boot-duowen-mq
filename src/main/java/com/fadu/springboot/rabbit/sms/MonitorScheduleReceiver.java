@@ -26,7 +26,7 @@ public class MonitorScheduleReceiver {
 
     @RabbitListener(queues = "monitorScheduleQueue", containerFactory = "rabbitListenerContainerFactory")
     public void process(@Payload MonitorSsdbOrder dto, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) throws Exception {
-        log.info("参数为:->", dto.toString());
+        log.info("参数为:->{}", dto.toString());
         try {
             monitorScheduleQueue.monitorSchedule(dto, dto.getWaitMinutes() * 60 * 1000);
         } catch (Exception e) {
