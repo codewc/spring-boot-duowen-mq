@@ -39,8 +39,11 @@ duowen:
         dev: https://test.duowenlvshi.com/duowenapp_b
         product: http://120.25.244.48
         #正在使用的环境
-        evn: https://test.duowenlvshi.com/duowenapp_b
-
+        evn: https://b.duowenlvshi.com
+      app:
+        e:
+          evn: https://e.duowenlvshi.com
+#duowen.feign.client.app.e.evn
 
   rabbitmq:
     #开发环境配置。
@@ -71,7 +74,7 @@ duowen:
     #正在使用的环境
     evn:
         connectionFactory:
-          host: 120.76.138.153
+          host: 120.25.161.131
           port: 5672
           username: admin
           password: admin
