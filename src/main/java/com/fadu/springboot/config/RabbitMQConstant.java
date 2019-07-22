@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties
 @Component
 public class RabbitMQConstant {
-
+    // -- exchange定义 开始 --
     @Getter
     @Setter
     @Value("${duowen.rabbitmq.exchanges.smsExchangeName}")
@@ -26,6 +26,18 @@ public class RabbitMQConstant {
     @Value("${duowen.rabbitmq.exchanges.smDelayedExchangeName}")
     private String smsDelayedExchangeName;
 
+    @Getter
+    @Setter
+    @Value("${duowen.rabbitmq.exchanges.lawyerCooperationMessageExchangeName}")
+    private String lawyerCooperationMessageExchangeName;
+
+    @Getter
+    @Setter
+    @Value("${duowen.rabbitmq.exchanges.delayedLawyerCooperationMessageExchangeName}")
+    private String delayedLawyerCooperationMessageExchangeName;
+    // -- exchange定义 结束 --
+
+    // -- queue定义 开始 --
     @Getter
     @Setter
     @Value("${duowen.rabbitmq.queues.immediate}")
@@ -43,6 +55,23 @@ public class RabbitMQConstant {
 
     @Getter
     @Setter
+    @Value("${duowen.rabbitmq.queues.appMessage}")
+    private String appMessageQueue;
+
+    @Getter
+    @Setter
+    @Value("${duowen.rabbitmq.queues.delayedAppMessage}")
+    private String delayedAppMessageQueue;
+
+    @Getter
+    @Setter
+    @Value("${duowen.rabbitmq.queues.delayedAppMessageRepeat}")
+    private String delayedAppMessageRepeatQueue;
+    // -- queue定义 结束 --
+
+    // -- key定义 开始 --
+    @Getter
+    @Setter
     @Value("${duowen.rabbitmq.routingKey.smsRootingKey}")
     private String smsRootingKey;
 
@@ -50,5 +79,21 @@ public class RabbitMQConstant {
     @Setter
     @Value("${duowen.rabbitmq.routingKey.smDelayedKey}")
     private String smDelayedKey;
+
+    @Getter
+    @Setter
+    @Value("${duowen.rabbitmq.routingKey.appMessageKey}")
+    private String appMessageKey;
+
+    @Getter
+    @Setter
+    @Value("${duowen.rabbitmq.routingKey.delayedAppMessageKey}")
+    private String delayedAppMessageKey;
+
+    @Getter
+    @Setter
+    @Value("${duowen.rabbitmq.routingKey.delayedAppMessageRepeatKey}")
+    private String delayedAppMessageRepeatKey;
+    // -- key定义 结束 --
 
 }

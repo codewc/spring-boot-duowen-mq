@@ -113,26 +113,32 @@ public class TopicRabbitConfig {
     //-----------指定交换机[开始]----------------------
     @Bean
     public DirectExchange smsExchange() {
-        DirectExchange exchange = new DirectExchange(rabbitMQConstant.getSmsExchangeName());
-        return exchange;
+        return new DirectExchange(rabbitMQConstant.getSmsExchangeName());
     }
 
     @Bean
     public DirectExchange smsDelayedExchange() {
-        DirectExchange exchange = new DirectExchange(rabbitMQConstant.getSmsDelayedExchangeName());
-        return exchange;
+        return new DirectExchange(rabbitMQConstant.getSmsDelayedExchangeName());
     }
 
     @Bean
     public DirectExchange monitorScheduleExchange() {
-        DirectExchange exchange = new DirectExchange("monitorScheduleDirectExchange");
-        return exchange;
+        return new DirectExchange("monitorScheduleDirectExchange");
     }
 
     @Bean
     public DirectExchange monitorDelayedScheduleExchange() {
-        DirectExchange exchange = new DirectExchange("monitorDelayedScheduleExchange");
-        return exchange;
+        return new DirectExchange("monitorDelayedScheduleExchange");
+    }
+
+    @Bean
+    public DirectExchange lawyerCooperationMessageExchange() {
+        return new DirectExchange(rabbitMQConstant.getLawyerCooperationMessageExchangeName());
+    }
+
+    @Bean
+    public DirectExchange delayedLawyerCooperationMessageExchange() {
+        return new DirectExchange(rabbitMQConstant.getDelayedLawyerCooperationMessageExchangeName());
     }
     //-----------指定交换机[结束]----------------------
 
@@ -154,14 +160,14 @@ public class TopicRabbitConfig {
 
     @Bean
     public Queue repeatSMSLetterQueue() {
-        Queue queue = new Queue(rabbitMQConstant.getSmsDelayedAfterRepeatQueue(), true, false, false);
-        return queue;
+        return new Queue(rabbitMQConstant.getSmsDelayedAfterRepeatQueue(), true, false, false);
     }
 
     @Bean
     public Queue monitorScheduleQueue() {
         return new Queue("monitorScheduleQueue", true);
     }
+
     @Bean
     public Queue deadMonitorScheduleQueue() {
         Map<String, Object> arguments = new HashMap<>();
@@ -173,8 +179,26 @@ public class TopicRabbitConfig {
 
     @Bean
     public Queue repeatMonitorScheduleQueue() {
-        Queue queue = new Queue("repeatMonitorScheduleQueue", true, false, false);
-        return queue;
+        return new Queue("repeatMonitorScheduleQueue", true, false, false);
+    }
+
+    @Bean
+    public Queue appMessageQueue() {
+        return new Queue(rabbitMQConstant.getAppMessageQueue(), true, false, false);
+    }
+
+    @Bean
+    public Queue delayedAppMessageQueue() {
+        Map<String, Object> arguments = new HashMap<>();
+        arguments.put("x-dead-letter-exchange", rabbitMQConstant.getDelayedLawyerCooperationMessageExchangeName());// 死信：DLX,dead
+        arguments.put("x-dead-letter-routing-key", rabbitMQConstant.getDelayedAppMessageRepeatKey());
+        return new Queue(rabbitMQConstant.getDelayedAppMessageQueue(), true, false, false, arguments);
+    }
+
+
+    @Bean
+    public Queue delayedAppMessageRepeatQueue(){
+        return new Queue(rabbitMQConstant.getDelayedAppMessageRepeatQueue(), true, false, false);
     }
     //-----------指定Queue[结束]----------------------
 
@@ -183,7 +207,6 @@ public class TopicRabbitConfig {
     public Binding smsImmediateBinding() {
         return BindingBuilder.bind(smsImmediateQueue()).to(smsExchange()).with(rabbitMQConstant.getSmsRootingKey());
     }
-
 
     @Bean
     public Binding deadSMSLetterBind() {
@@ -209,6 +232,22 @@ public class TopicRabbitConfig {
     public Binding monitorScheduleBind() {
         return BindingBuilder.bind(monitorScheduleQueue()).to(monitorScheduleExchange()).with("monitorScheduleQueue");
     }
+
+    @Bean
+    public Binding appMessageBind() {
+        return BindingBuilder.bind(appMessageQueue()).to(lawyerCooperationMessageExchange()).with(rabbitMQConstant.getAppMessageKey());
+    }
+
+    @Bean
+    public Binding delayedAppMessageBind() {
+        return BindingBuilder.bind(delayedAppMessageQueue()).to(delayedLawyerCooperationMessageExchange()).with(rabbitMQConstant.getDelayedAppMessageKey());
+    }
+
+    @Bean
+    public Binding delayedAppMessageRepeatBind() {
+        return BindingBuilder.bind(delayedAppMessageRepeatQueue()).to(delayedLawyerCooperationMessageExchange()).with(rabbitMQConstant.getDelayedAppMessageRepeatKey());
+    }
+
     //-----------指定Binding[结束]----------------------
 
     @Bean

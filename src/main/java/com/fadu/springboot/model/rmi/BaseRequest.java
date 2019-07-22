@@ -14,18 +14,29 @@ import java.io.Serializable;
 @ToString
 @EqualsAndHashCode
 public class BaseRequest implements Serializable {
-    /**接口编码*/
+    /**
+     * 接口编码
+     */
     private String actionCode = "";
 
-    /**id， 对应旧版本数据库的token字段*/
-    private String token = "";
+    /**
+     * id， 对应旧版本数据库的token字段
+     */
+    private String token = "8af40d1763952f960163a54b4f8717e1";
 
-    /**md5签名串*/
+    /**
+     * md5签名串
+     */
     private String encryptCode = "";
 
-    /**请求时间*/
+    /**
+     * 请求时间
+     */
     private long time;
 
-    /**版本号*/
-    private Integer version;
+    /**
+     * 版本号
+     */
+    private Integer version = 100;
+
 }
