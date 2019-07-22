@@ -1,6 +1,7 @@
 package com.fadu.springboot.service.interfaces.rmi;
 
 import com.fadu.springboot.model.rmi.MT002Request;
+import com.fadu.springboot.model.rmi.app.b.MT006Request;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,5 +27,14 @@ public interface AppBServiceRMI {
      */
     @RequestMapping(value = "/B/android", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = "text/html;charset=UTF-8")
     String doService(@RequestBody MT002Request request);
+
+    /**
+     * 处理律师合作app消息
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/B/android", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = "text/html;charset=UTF-8")
+    String doService(@RequestBody MT006Request request);
 
 }

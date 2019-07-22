@@ -1,8 +1,8 @@
 package com.fadu.springboot.service;
 
 import com.fadu.springboot.config.RabbitMQConstant;
-import com.fadu.springboot.model.SMS;
-import com.fadu.springboot.service.interfaces.SMSQueueService;
+import com.fadu.springboot.model.LawyerCooperationMessageDTO;
+import com.fadu.springboot.service.interfaces.LawyerCooperationMessageService;
 import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessagePostProcessor;
@@ -11,14 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * 延迟发送短信
- *
- * @Auther: wangchun
- * @Date: 2018/6/29 17:18
+ * @author wangchun
+ * @since 2019/7/22 16:07
  */
 @Service
-public class SMSQueueServiceImpl implements SMSQueueService {
-
+public class LawyerCooperationMessageServiceImpl implements LawyerCooperationMessageService {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
@@ -26,14 +23,18 @@ public class SMSQueueServiceImpl implements SMSQueueService {
     private RabbitMQConstant rabbitMQConstant;
 
     @Override
-    public void send(SMS message, long times) {
+    public void convertAndSend(LawyerCooperationMessageDTO dto) {
         MessagePostProcessor postProcessor = new MessagePostProcessor() {
             @Override
             public Message postProcessMessage(Message message) throws AmqpException {
-                message.getMessageProperties().setExpiration(times + "");
+                message.getMessageProperties().setExpiration(String.valueOf(dto.getWaitMinutes() * 60 * 1000));
                 return message;
             }
         };
-        rabbitTemplate.convertAndSend(rabbitMQConstant.getSmsDelayedExchangeName(), rabbitMQConstant.getSmsDelayedQueue(), message, postProcessor);
+        rabbitTemplate.convertAndSend(
+                rabbitMQConstant.getDelayedLawyerCooperationMessageExchangeName(),
+                rabbitMQConstant.getDelayedAppMessageQueue(),
+                dto,
+                postProcessor);
     }
 }
