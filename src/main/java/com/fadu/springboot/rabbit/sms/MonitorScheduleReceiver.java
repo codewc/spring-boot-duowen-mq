@@ -13,12 +13,14 @@ import org.springframework.stereotype.Component;
 
 /**
  * 监控订单
+ * 业务调整，不发监控短信
  *
  * @Auther: wangchun
  * @Date: 2018/7/5 15:22
  */
 @Component
 @Slf4j
+@Deprecated
 public class MonitorScheduleReceiver {
 
     @Autowired
@@ -28,7 +30,7 @@ public class MonitorScheduleReceiver {
     public void process(@Payload MonitorSsdbOrder dto, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) throws Exception {
         log.info("参数为:->{}", dto.toString());
         try {
-            monitorScheduleQueue.monitorSchedule(dto, dto.getWaitMinutes() * 60 * 1000);
+//            monitorScheduleQueue.monitorSchedule(dto, dto.getWaitMinutes() * 60 * 1000);
         } catch (Exception e) {
             log.error("发生错误->", e);
         } finally {
