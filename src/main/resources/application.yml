@@ -37,9 +37,9 @@ duowen:
         # 本地地址
         localhost: http://localhost:8080/duowenapp_b
         dev: https://test.duowenlvshi.com/duowenapp_b
-        product: http://120.25.244.48
+        product: https://b.duowenlvshi.com
         #正在使用的环境
-        evn: https://b.duowenlvshi.com
+        evn: http://localhost:8080/duowenapp_b
       app:
         e:
           evn: https://e.duowenlvshi.com
@@ -74,7 +74,7 @@ duowen:
     #正在使用的环境
     evn:
         connectionFactory:
-          host: 120.25.161.131
+          host: 120.76.138.153
           port: 5672
           username: admin
           password: admin
@@ -84,6 +84,8 @@ duowen:
       smsExchangeName: sms #短信
       smDelayedExchangeName: sms_delayed #定时短信发送
       monitorScheduleExchangeName: monitorScheduleExchangeName #调度监控
+      lawyerCooperationMessageExchangeName: lawyerCooperationMessage #律师合作 发送app消息
+      delayedLawyerCooperationMessageExchangeName: delayedLawyerCooperationMessage #律师合作延时发送app消息
     queues:
       #smsExchangeName 立即发送短信消息
       immediate: immediate
@@ -91,8 +93,17 @@ duowen:
       delayed: delayed
       #smDelayedExchangeName 延迟发送短信消息,重新处理
       smsDelayedAfterRepeat: smsDelayedAfterRepeat
+      #律师合作 发送app消息
+      appMessage: appMessage
+      #律师合作 延迟发送app消息
+      delayedAppMessage: delayedAppMessage
+      #律师合作 延迟发送app消息,重新处理
+      delayedAppMessageRepeat: delayedAppMessageRepeat
     #立即发送消息
     routingKey:
       smsRootingKey: sms
       smDelayedKey: sms_delayed
+      appMessageKey: appMessage
+      delayedAppMessageKey: delayedAppMessage
+      delayedAppMessageRepeatKey: delayedAppMessageRepeat
 #####################duowen个性化配置-结束####################################
